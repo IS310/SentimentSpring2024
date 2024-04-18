@@ -14,6 +14,7 @@ SVal <- Sents$value
 names(SVal) <- Sents$word
 SVF <- function(x){return(as.integer(SVal[x]))}
 
+# Sample comment
 
 # Read Jane Eyre into chapter-size chunks of text
 JaneSentimentByChapter <- c() # start with an empty vector 
