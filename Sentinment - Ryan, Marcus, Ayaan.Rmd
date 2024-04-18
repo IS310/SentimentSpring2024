@@ -1,0 +1,110 @@
+---
+title: "Sentiment - Ryan McManus"
+output: html_document
+date: "2024-04-18"
+---
+
+##Names: Ryan McManus, Marcus Figueras, Ayaan Kazi
+
+# Document Setup
+```{r}
+library(tidytext)
+library(textdata)
+
+# Create a function for looking up AFINN sentiment vayeslues from words
+Sents <- get_sentiments("afinn")
+SVal <- Sents$value
+names(SVal) <- Sents$word
+SVF <- function(x){return(as.integer(SVal[x]))}
+
+
+# Read Jane Eyre into chapter-size chunks of text
+JaneSentimentByChapter <- c() # start with an empty vector 
+text.v <- scan("https://www.gutenberg.org/files/1260/1260-0.txt", what="character", sep="\n")
+start.v <- (grep("\\*\\*\\*\\W*START OF TH",text.v) + 1)
+end.v <- (grep("\\*\\*\\*\\W*END OF TH",text.v) - 1)
+novel.lines.v <- text.v[start.v:end.v]                              # 1 element per line
+novel.v <- paste(novel.lines.v, collapse="<br>")                    # linebreaks become tags
+novel.lower.v <- tolower(novel.v)
+jane.chap.l <- strsplit(novel.lower.v, "<br>chapter [ivx]+(—conclusion)?<br>")    # split at chapter breaks
+jane.chap.v <- unlist(jane.chap.l)                                  # 1 element per chapter
+
+
+# Loop over the chapters, split them into words, and sum up the AFINN values for each chapter
+for(i in 1:length(jane.chap.v)) {    
+  chapteri <- jane.chap.v[i]
+  chapterlist <- strsplit(chapteri,"\\W")
+  chapterv <- unlist(chapterlist)
+  baz <- SVF(chapterv)            # sentiment values for every word
+  buz <- baz[which(baz!="NA")]    # but many words aren't in AFINN, so eliminate null values
+  JaneSentimentByChapter[i] = sum(buz)
+}
+
+# Create a graph plotting the sentiment totals for each chapter of the novel
+plot(JaneSentimentByChapter)
+
+
+```
+
+```{r}
+
+```
+
+# My Own Work
+
+
+##Getting Started
+
+```{r}
+### Starting off, I looked at the code that made the graph, and sought to modify it
+start59.v <- (grep("Five o’clock had hardly struck on",text.v) -1)
+end59.v <- (grep("“Resurgam.”",text.v))
+novel59.lines.v <- text.v[start59.v:end59.v]                              # 1 element per line
+novel59.v <- paste(novel59.lines.v, collapse="<br>")                    # linebreaks become tags
+novel59.lower.v <- tolower(novel59.v)
+jane.59.l <- strsplit(novel59.lower.v, "<br>chapter [ivx]+(—conclusion)?<br>")    # split at chapter breaks
+jane.59.v <- unlist(jane.59.l)     
+
+
+```
+
+```{r}
+chapteri <- jane.chap.v[6]
+chapterlist <- strsplit(chapteri,"\\W")
+chapterv <- unlist(chapterlist)
+baz <- SVF(chapterv)            # sentiment values for every word
+chapter5 <- baz[which(baz!="NA")]
+print(table(chapter5))
+
+chapteri <- jane.chap.v[7]
+chapterlist <- strsplit(chapteri,"\\W")
+chapterv <- unlist(chapterlist)
+baz <- SVF(chapterv)            # sentiment values for every word
+chapter6 <- baz[which(baz!="NA")]
+print(table(chapter6))
+
+chapteri <- jane.chap.v[8]
+chapterlist <- strsplit(chapteri,"\\W")
+chapterv <- unlist(chapterlist)
+baz <- SVF(chapterv)            # sentiment values for every word
+chapter7 <- baz[which(baz!="NA")]
+print(table(chapter7))
+
+chapteri <- jane.chap.v[9]
+chapterlist <- strsplit(chapteri,"\\W")
+chapterv <- unlist(chapterlist)
+baz <- SVF(chapterv)            # sentiment values for every word
+chapter8 <- baz[which(baz!="NA")]
+print(table(chapter8))
+
+chapteri <- jane.chap.v[10]
+chapterlist <- strsplit(chapteri,"\\W")
+chapterv <- unlist(chapterlist)
+baz <- SVF(chapterv)            # sentiment values for every word
+chapter9 <- baz[which(baz!="NA")]
+print(table(chapter9))
+```
+
+
+
+
